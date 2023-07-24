@@ -1,6 +1,8 @@
 package com.basic.sign.domain.sign;
 
-import com.basic.sign.domain.user.dto.request.UserDtoRequest;
+import com.basic.sign.domain.sign.dto.request.FindByIdDtoRequest;
+import com.basic.sign.domain.user.dto.request.SignUpDtoRequest;
+import com.basic.sign.util.aop.annotation.MethodInfoLogging;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,19 +15,32 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/sign")
-public class UserController {
+public class SignController {
 
-    private final UserService userService;
+    private final SignService signService;
 
     /**
      * 회원가입
      */
+    @MethodInfoLogging(description = "회원가입")
     @PostMapping("/signup")
-    public void signUp(@Valid @RequestBody UserDtoRequest request) {
+    public String signUp(@Valid @RequestBody SignUpDtoRequest request) {
 
-        System.out.println("받았다 십탱아");
-        System.out.println(request);
+        FindByIdDtoRequest findByIdDtoRequest = new FindByIdDtoRequest();
+        findByIdDtoRequest.setUserId(request.getUserId());
 
+        if(signService.findById(findByIdDtoRequest) == 0) {
+            signService.signUp(request);
+            return "SUCCESS";
+        } else {
+            return "PRIMARY KEY EXISTS";
+        }
+    }
+
+    @MethodInfoLogging(description = "아이디 유효 체크")
+    @PostMapping("/findbyid")
+    public Long findById(@Valid @RequestBody FindByIdDtoRequest request){
+        return signService.findById(request);
     }
 
 }

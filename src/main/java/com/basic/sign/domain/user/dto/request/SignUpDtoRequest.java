@@ -1,4 +1,4 @@
-package com.basic.sign.domain.dto.request;
+package com.basic.sign.domain.user.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,12 +8,12 @@ import javax.validation.constraints.NotEmpty;
 
 @ToString
 @Getter @Setter
-public class UserDtoRequest {
+public class SignUpDtoRequest {
 
     @NotEmpty(message = "필수값 입니다.")
-    private String id;
+    private String userId;
 
     @NotEmpty(message = "필수값 입니다.")
-    private String password;
+    private String userPassword;
 
 }
